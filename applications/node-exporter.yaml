@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: node-exporter
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: monitoring
+    server: https://kubernetes.default.svc
+  project: monitoring
+  source:
+    path: node-exporter/
+    repoURL: https://github.com/Algueron/thanos-prometheus-cluster.git
+    targetRevision: HEAD
+  syncPolicy:
+    automated: {}
+    syncOptions:
+      - CreateNamespace=true
